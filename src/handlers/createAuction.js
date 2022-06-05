@@ -1,7 +1,5 @@
-const AWS = require("aws-sdk");
-
 async function createAuction(event, context) {
-  const { title } = JSON.parse(event.body);
+  const { title, description } = JSON.parse(event.body);
   const now = new Date();
 
   const auction = {
