@@ -1,5 +1,6 @@
 import AWS from "aws-sdk";
 import { v4 as uuid } from "uuid";
+
 const db = new AWS.DynamoDB.DocumentClient();
 
 async function createAuction(event, context) {
@@ -14,12 +15,16 @@ async function createAuction(event, context) {
     createdAt: now.toISOString(),
   };
 
-  await db
-    .put({
-      TableName: process.env.AUCTIONS_TABLE_NAME,
-      Item: auction,
-    })
-    .promise();
+  try {
+    await db
+      .put({
+        TableName: process.env.AUCTIONS_TABLE_NAME,
+        Item: auction,
+      })
+      .promise();
+  } catch (error) {
+    console.error(error);
+  }
 
   return {
     statusCode: 201,
