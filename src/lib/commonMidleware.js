@@ -4,7 +4,7 @@ import httpJsonBodyParser from "@middy/http-json-body-parser";
 import middy from "@middy/core";
 
 export default (handler) =>
-  middy().use([
+  middy(handler).use([
     httpErrorHandler(),
     httpEventNormalizer(),
     httpJsonBodyParser(),
