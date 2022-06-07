@@ -7,10 +7,10 @@ const db = new AWS.DynamoDB.DocumentClient();
 async function placeBid(event, context) {
   const { id } = event.pathParameters;
   const { amount } = event.body;
-
+  console.log("lucho amount:", amount);
   const params = {
     TableName: process.env.AUCTIONS_TABLE_NAME,
-    key: { id },
+    Key: { id },
     UpdateExpression: "set highestBid.amount = :amount",
     ExpressionAttributeValues: { ":amount": amount },
     ReturnValues: "ALL_NEW",
@@ -19,7 +19,7 @@ async function placeBid(event, context) {
   let updatedAuction;
   try {
     const result = await db.update(params).promise();
-    updatedAuction = result;
+    updatedAuction = result.Attributes;
   } catch (error) {
     console.error(error);
     throw new createError.InternalServerError(error);
