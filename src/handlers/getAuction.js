@@ -4,8 +4,7 @@ import createError from "http-errors";
 
 const db = new AWS.DynamoDB.DocumentClient();
 
-async function getAuction(event, context) {
-  const { id } = event.pathParameters;
+export const getAuctionById = async (id) => {
   let auction;
 
   try {
@@ -24,6 +23,13 @@ async function getAuction(event, context) {
   if (!auction) {
     throw new createError.NotFound(`Auction with ID ${id} not found. `);
   }
+
+  return auction;
+};
+
+async function getAuction(event, context) {
+  const { id } = event.pathParameters;
+  let auction = await getAuctionById(id);
 
   return {
     statusCode: 200,
