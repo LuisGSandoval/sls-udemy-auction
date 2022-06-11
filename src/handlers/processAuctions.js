@@ -5,9 +5,9 @@ import { getEndedFunctions } from "../lib/getEndedAuctions";
 const processAuctions = async (event, context) => {
   try {
     const auctiounsToClose = await getEndedFunctions();
-    const closePromises = auctiounsToClose.map((auction) => {
-      return closeAuction(auction.id);
-    });
+    const closePromises = auctiounsToClose.map((auction) =>
+      closeAuction(auction)
+    );
     await Promise.all(closePromises);
 
     return { closed: closePromises.length };

@@ -1,20 +1,19 @@
 import AWS from "aws-sdk";
 
-const dynamodb = AWS.DynamoDB.DocumentClient();
+const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-export const closeAuction = async (id) => {
+export const closeAuction = async (auction) => {
   const result = await dynamodb
     .update({
       TableName: process.env.AUCTIONS_TABLE_NAME,
-      key: {
-        id,
+      Key: {
+        id: auction.id,
       },
       UpdateExpression: "set #status = :status",
       ExpressionAttributeValues: { ":status": "CLOSED" },
       ExpressionAttributeNames: {
-        "#status": ":status",
+        "#status": "status",
       },
-      ReturnValues: "ALL_NEW",
     })
     .promise();
 
